@@ -1,0 +1,75 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-02 23:22+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: config/settings/base.py:71
+msgid "English"
+msgstr ""
+
+#: config/settings/base.py:72
+msgid "Indonesia"
+msgstr ""
+
+#: templates/snippets/footer.html:8
+msgid ""
+"Full Stack Developer specializing in web applications and automation "
+"solutions."
+msgstr ""
+"Full Stack Developer yang berspesialisasi dalam aplikasi web dan solusi "
+"otomasi."
+
+#: templates/snippets/footer.html:12
+msgid "Quick Links"
+msgstr "Tautan Cepat"
+
+#: templates/snippets/footer.html:18 templates/snippets/header.html:150
+#: templates/snippets/header.html:163 templates/snippets/header.html:189
+msgid "About"
+msgstr "Tentang"
+
+#: templates/snippets/footer.html:24 templates/snippets/header.html:152
+#: templates/snippets/header.html:164 templates/snippets/header.html:191
+msgid "Experience"
+msgstr "Pengalaman"
+
+#: templates/snippets/footer.html:30 templates/snippets/header.html:154
+#: templates/snippets/header.html:165 templates/snippets/header.html:193
+msgid "Projects"
+msgstr "Proyek"
+
+#: templates/snippets/footer.html:36 templates/snippets/header.html:156
+#: templates/snippets/header.html:166 templates/snippets/header.html:195
+msgid "Contact"
+msgstr "Kontak"
+
+#: templates/snippets/footer.html:41
+msgid "Connect"
+msgstr "Hubungi"
+
+#: templates/snippets/footer.html:50
+msgid "Email"
+msgstr "Email"
+
+#: templates/snippets/footer.html:56
+msgid "© 2026 Mualiful Anwar. All rights reserved."
+msgstr "© 2026 Mualiful Anwar. Hak cipta dilindungi undang-undang."
+
+#: templates/snippets/header.html:119 templates/snippets/header.html:146
+msgid "Back to Portfolio"
+msgstr "Kembali ke Portfolio"
