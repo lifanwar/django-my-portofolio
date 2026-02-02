@@ -1,54 +1,52 @@
+{% load i18n %}
+
 <header class="border-b border-gray-300 bg-[#fefce8] sticky top-0 z-50">
   <nav class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
     <!-- Logo -->
     <div class="flex items-center gap-4">
-      <h1 class="text-xl font-bold tracking-tight leading-tight">
-        MUALIFUL<br />ANWAR
-      </h1>
+      <a href="{% url 'home' %}">
+        <h1 class="text-xl font-bold tracking-tight leading-tight hover:text-blue-600 transition-colors">
+          MUALIFUL<br />ANWAR
+        </h1>
+      </a>
       <div class="w-px h-12 bg-gray-900"></div>
 
       <!-- Language Dropdown -->
       <div
         x-data="{ 
-  open: false, 
-  selected: 'Language',
-  closeTimer: null,
-  isTouchDevice: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0),
-  openDropdown() {
-    if (this.isTouchDevice) return; // Disable hover on touch devices
-    clearTimeout(this.closeTimer);
-    this.open = true;
-  },
-  closeDropdown() {
-    if (this.isTouchDevice) return; // Disable hover on touch devices
-    this.closeTimer = setTimeout(() => {
-      this.open = false;
-    }, 200);
-  }
-}"
+          open: false, 
+          selected: '{% get_current_language as LANGUAGE_CODE %}{% if LANGUAGE_CODE == "id" %}Bahasa{% else %}Language{% endif %}',
+          closeTimer: null,
+          isTouchDevice: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0),
+          openDropdown() {
+            if (this.isTouchDevice) return;
+            clearTimeout(this.closeTimer);
+            this.open = true;
+          },
+          closeDropdown() {
+            if (this.isTouchDevice) return;
+            this.closeTimer = setTimeout(() => {
+              this.open = false;
+            }, 200);
+          },
+          switchLanguage(lang) {
+            this.selected = lang === 'id' ? 'Bahasa' : 'Language';
+            this.open = false;
+          }
+        }"
         @click.away="open = false"
         @mouseenter="openDropdown()"
         @mouseleave="closeDropdown()"
         class="relative"
       >
         <button
+          type="button"
           @click="open = !open"
           class="flex items-center gap-3 text-base font-medium"
         >
           <span x-text="selected" class="inline-block min-w-[70px]"></span>
-          <svg
-            class="w-4 h-4 transition-transform duration-200"
-            :class="{ 'rotate-180': open }"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
+          <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
           </svg>
         </button>
 
@@ -64,133 +62,140 @@
           class="absolute top-full left-0 mt-2 bg-white border-4 border-gray-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-50"
           style="display: none"
         >
-          <!-- Garis atas -->
           <div class="w-full h-px bg-gray-900"></div>
+          
+          <!-- Language Form -->
+          <form action="{% url 'set_language' %}" method="post" id="language-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            {% get_current_language as LANGUAGE_CODE %}
 
-          <!-- Option: English -->
-          <button
-            @click="selected = 'Language'; open = false"
-            class="block w-full text-left px-4 py-2.5 text-base font-medium hover:bg-yellow-100 transition-colors whitespace-nowrap min-w-[120px]"
-            :class="{ 'bg-yellow-100': selected === 'Language' }"
-          >
-            EN - English
-          </button>
+            <!-- Option: English -->
+            <button
+              type="submit"
+              name="language"
+              value="en"
+              @click="switchLanguage('en')"
+              class="block w-full text-left px-4 py-2.5 text-base font-medium hover:bg-yellow-100 transition-colors whitespace-nowrap min-w-[120px]"
+              :class="{ 'bg-yellow-100': selected === 'Language' }"
+              {% if LANGUAGE_CODE == 'en' %}style="background-color: #fef08a;"{% endif %}
+            >
+              EN - English
+            </button>
 
-          <!-- Garis pemisah -->
-          <div class="w-full h-px bg-gray-900"></div>
+            <div class="w-full h-px bg-gray-900"></div>
 
-          <!-- Option: Indonesia -->
-          <button
-            @click="selected = 'Bahasa'; open = false"
-            class="block w-full text-left px-4 py-2.5 text-base font-medium hover:bg-yellow-100 transition-colors whitespace-nowrap min-w-[120px]"
-            :class="{ 'bg-yellow-100': selected === 'Bahasa' }"
-          >
-            ID - Indonesia
-          </button>
+            <!-- Option: Indonesia -->
+            <button
+              type="submit"
+              name="language"
+              value="id"
+              @click="switchLanguage('id')"
+              class="block w-full text-left px-4 py-2.5 text-base font-medium hover:bg-yellow-100 transition-colors whitespace-nowrap min-w-[120px]"
+              :class="{ 'bg-yellow-100': selected === 'Bahasa' }"
+              {% if LANGUAGE_CODE == 'id' %}style="background-color: #fef08a;"{% endif %}
+            >
+              ID - Indonesia
+            </button>
+          </form>
 
-          <!-- Garis bawah -->
           <div class="w-full h-px bg-gray-900"></div>
         </div>
       </div>
     </div>
 
-    <!-- Menu -->
-    <div class="hidden md:flex items-center gap-8">
-      <a href="#about" class="text-base font-medium hover:underline">About</a>
-      <a href="#experience" class="text-base font-medium hover:underline"
-        >Experience</a
-      >
-      <a href="#projects" class="text-base font-medium hover:underline"
-        >Projects</a
-      >
-      <a href="#contact" class="text-base font-medium hover:underline"
-        >Contact</a
-      >
-    </div>
+    <!-- Right Side: Conditional Navigation -->
+    {% if show_back_button %}
+      <!-- Showcase Page: Show Back Button -->
+      <div x-data="{ mobileMenuOpen: false }" class="flex items-center gap-4">
+        <!-- Back Button (Desktop Only) -->
+        <a
+          href="{% url 'home' %}#projects"
+          class="hidden md:inline-flex items-center gap-2 text-base font-medium hover:font-bold transition-all"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          {% trans "Back to Portfolio" %}
+        </a>
 
-    <!-- Mobile menu button with Alpine.js -->
-    <div x-data="{ mobileMenuOpen: false }" class="md:hidden relative">
-      <!-- Hamburger Button -->
-      <button
-        @click="mobileMenuOpen = !mobileMenuOpen"
-        class="relative w-6 h-6"
-      >
-        <span class="sr-only">Toggle menu</span>
-        <div class="absolute inset-0 flex flex-col justify-center gap-1.5">
-          <span
-            class="block h-0.5 w-6 bg-gray-900 transition-all duration-300 ease-in-out"
-            :class="mobileMenuOpen ? 'rotate-45 translate-y-2' : ''"
-          ></span>
-          <span
-            class="block h-0.5 w-6 bg-gray-900 transition-all duration-300 ease-in-out"
-            :class="mobileMenuOpen ? 'opacity-0' : ''"
-          ></span>
-          <span
-            class="block h-0.5 w-6 bg-gray-900 transition-all duration-300 ease-in-out"
-            :class="mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''"
-          ></span>
+        <!-- Hamburger Button (Mobile Only) -->
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden relative w-6 h-6">
+          <span class="sr-only">Toggle menu</span>
+          <div class="absolute inset-0 flex flex-col justify-center gap-1.5">
+            <span class="block h-0.5 w-6 bg-gray-900 transition-all duration-300 ease-in-out" :class="mobileMenuOpen ? 'rotate-45 translate-y-2' : ''"></span>
+            <span class="block h-0.5 w-6 bg-gray-900 transition-all duration-300 ease-in-out" :class="mobileMenuOpen ? 'opacity-0' : ''"></span>
+            <span class="block h-0.5 w-6 bg-gray-900 transition-all duration-300 ease-in-out" :class="mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''"></span>
+          </div>
+        </button>
+
+        <!-- Mobile Menu Dropdown -->
+        <div
+          x-show="mobileMenuOpen"
+          @click.away="mobileMenuOpen = false"
+          x-transition
+          class="md:hidden absolute top-full right-6 mt-2 bg-white border-4 border-gray-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] z-50 min-w-[200px]"
+          style="display: none"
+        >
+          <div class="w-full h-px bg-gray-900"></div>
+          <a href="{% url 'home' %}#projects" @click="mobileMenuOpen = false" class="block w-full text-left px-4 py-3 text-base font-medium hover:bg-yellow-100 transition-colors">
+            <div class="flex items-center gap-3">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+              </svg>
+              <span>{% trans "Back to Portfolio" %}</span>
+            </div>
+          </a>
+          <div class="w-full h-px bg-gray-900"></div>
+          <a href="{% url 'home' %}#about" @click="mobileMenuOpen = false" class="block px-4 py-3 text-base font-medium hover:bg-yellow-100">{% trans "About" %}</a>
+          <div class="w-full h-px bg-gray-900"></div>
+          <a href="{% url 'home' %}#experience" @click="mobileMenuOpen = false" class="block px-4 py-3 text-base font-medium hover:bg-yellow-100">{% trans "Experience" %}</a>
+          <div class="w-full h-px bg-gray-900"></div>
+          <a href="{% url 'home' %}#projects" @click="mobileMenuOpen = false" class="block px-4 py-3 text-base font-medium hover:bg-yellow-100">{% trans "Projects" %}</a>
+          <div class="w-full h-px bg-gray-900"></div>
+          <a href="{% url 'home' %}#contact" @click="mobileMenuOpen = false" class="block px-4 py-3 text-base font-medium hover:bg-yellow-100">{% trans "Contact" %}</a>
+          <div class="w-full h-px bg-gray-900"></div>
         </div>
-      </button>
-
-      <!-- Mobile Menu Dropdown -->
-      <div
-        x-show="mobileMenuOpen"
-        @click.away="mobileMenuOpen = false"
-        x-transition:enter="transition ease-out duration-100"
-        x-transition:enter-start="opacity-0 transform scale-95"
-        x-transition:enter-end="opacity-100 transform scale-100"
-        x-transition:leave="transition ease-in duration-75"
-        x-transition:leave-start="opacity-100 transform scale-100"
-        x-transition:leave-end="opacity-0 transform scale-95"
-        class="absolute top-full right-0 mt-2 bg-white border-4 border-gray-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] z-50 min-w-[200px]"
-        style="display: none"
-      >
-        <div class="w-full h-px bg-gray-900"></div>
-
-        <!-- About -->
-        <a
-          href="#about"
-          @click="mobileMenuOpen = false"
-          class="block w-full text-left px-4 py-3 text-base font-medium hover:bg-yellow-100 transition-colors"
-        >
-          About
-        </a>
-
-        <div class="w-full h-px bg-gray-900"></div>
-
-        <!-- Experience -->
-        <a
-          href="#experience"
-          @click="mobileMenuOpen = false"
-          class="block w-full text-left px-4 py-3 text-base font-medium hover:bg-yellow-100 transition-colors"
-        >
-          Experience
-        </a>
-
-        <div class="w-full h-px bg-gray-900"></div>
-
-        <!-- Projects -->
-        <a
-          href="#projects"
-          @click="mobileMenuOpen = false"
-          class="block w-full text-left px-4 py-3 text-base font-medium hover:bg-yellow-100 transition-colors"
-        >
-          Projects
-        </a>
-
-        <div class="w-full h-px bg-gray-900"></div>
-
-        <!-- Contact -->
-        <a
-          href="#contact"
-          @click="mobileMenuOpen = false"
-          class="block w-full text-left px-4 py-3 text-base font-medium hover:bg-yellow-100 transition-colors"
-        >
-          Contact
-        </a>
-
-        <div class="w-full h-px bg-gray-900"></div>
       </div>
-    </div>
+    {% else %}
+      <!-- Home Page: Show Menu Links -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="{% url 'home' %}#about" class="text-base font-medium hover:underline">{% trans "About" %}</a>
+        <a href="{% url 'home' %}#experience" class="text-base font-medium hover:underline">{% trans "Experience" %}</a>
+        <a href="{% url 'home' %}#projects" class="text-base font-medium hover:underline">{% trans "Projects" %}</a>
+        <a href="{% url 'home' %}#contact" class="text-base font-medium hover:underline">{% trans "Contact" %}</a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div x-data="{ mobileMenuOpen: false }" class="md:hidden relative">
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="relative w-6 h-6">
+          <span class="sr-only">Toggle menu</span>
+          <div class="absolute inset-0 flex flex-col justify-center gap-1.5">
+            <span class="block h-0.5 w-6 bg-gray-900 transition-all duration-300 ease-in-out" :class="mobileMenuOpen ? 'rotate-45 translate-y-2' : ''"></span>
+            <span class="block h-0.5 w-6 bg-gray-900 transition-all duration-300 ease-in-out" :class="mobileMenuOpen ? 'opacity-0' : ''"></span>
+            <span class="block h-0.5 w-6 bg-gray-900 transition-all duration-300 ease-in-out" :class="mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''"></span>
+          </div>
+        </button>
+
+        <!-- Mobile Menu Dropdown -->
+        <div
+          x-show="mobileMenuOpen"
+          @click.away="mobileMenuOpen = false"
+          x-transition
+          class="absolute top-full right-0 mt-2 bg-white border-4 border-gray-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] z-50 min-w-[200px]"
+          style="display: none"
+        >
+          <div class="w-full h-px bg-gray-900"></div>
+          <a href="{% url 'home' %}#about" @click="mobileMenuOpen = false" class="block px-4 py-3 text-base font-medium hover:bg-yellow-100">{% trans "About" %}</a>
+          <div class="w-full h-px bg-gray-900"></div>
+          <a href="{% url 'home' %}#experience" @click="mobileMenuOpen = false" class="block px-4 py-3 text-base font-medium hover:bg-yellow-100">{% trans "Experience" %}</a>
+          <div class="w-full h-px bg-gray-900"></div>
+          <a href="{% url 'home' %}#projects" @click="mobileMenuOpen = false" class="block px-4 py-3 text-base font-medium hover:bg-yellow-100">{% trans "Projects" %}</a>
+          <div class="w-full h-px bg-gray-900"></div>
+          <a href="{% url 'home' %}#contact" @click="mobileMenuOpen = false" class="block px-4 py-3 text-base font-medium hover:bg-yellow-100">{% trans "Contact" %}</a>
+          <div class="w-full h-px bg-gray-900"></div>
+        </div>
+      </div>
+    {% endif %}
   </nav>
 </header>
