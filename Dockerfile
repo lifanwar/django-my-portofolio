@@ -8,7 +8,7 @@ COPY theme/static_src/package*.json ./theme/static_src/
 
 # Install dependencies
 WORKDIR /app/theme/static_src
-RUN npm ci --production
+RUN npm ci
 
 # Copy seluruh project untuk tailwind build
 WORKDIR /app
