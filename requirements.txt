@@ -5,3 +5,4 @@ gunicorn
 django-tailwind
 whitenoise
 python-dotenv
+requests
