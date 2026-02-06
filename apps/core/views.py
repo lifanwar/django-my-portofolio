@@ -3,6 +3,9 @@ from django.contrib import messages
 from django.views.generic import TemplateView
 from .forms import ContactForm
 from apps.core.utils import send_telegram_notification
+import logging
+
+logger = logging.getLogger(__name__)
 
 class HomeView(TemplateView):
     template_name = 'index.html'
@@ -19,11 +22,15 @@ class HomeView(TemplateView):
             contact.status = 'new'
             contact.save()
 
-            send_telegram_notification(
-                name=contact.name,
-                email=contact.email,
-                message=contact.message
-            )
+            try:
+                send_telegram_notification(
+                    name=contact.name,
+                    email=contact.email,
+                    message=contact.message
+                )
+            except Exception as e:
+                # Log pesan khusus + detail error + traceback
+                logger.exception("Failed to send Telegram notification: %s", e)
             
             messages.success(request, 'Thank you! Your message has been sent successfully. I will get back to you soon.')
             return redirect('home')
